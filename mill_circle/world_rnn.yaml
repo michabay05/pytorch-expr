@@ -1,0 +1,60 @@
+---
+type: "RectangularWorld"
+size:  # in meters
+  - 10
+  - 10
+time_step: !np 1 / 20  # 0.05 seconds
+seed: 2023
+spawners:
+- type: UniformAgentSpawner
+  n: <{ n|default(6) }>  # default number of agents BUT may be overridden by user args
+  facing: away
+  region: [[4.4, 4.4], [4.4, 5.6], [5.6, 5.6], [5.6, 4.4]]
+  agent:
+    type: MazeAgent
+    sensors:
+    - type: BinaryFOVSensor
+      theta: 0.45  # Vision Angle / 2 (Radians)
+      distance: 1.0  # meters. previously 2.55
+      show: true
+      bias: 0
+      store_history: false
+      target_team: blue
+    - type: BinaryFOVSensor
+      theta: 0.45  # Vision Angle / 2 (Radians)
+      distance: 1.0  # meters. previously 2.55
+      show: true
+      bias: 0
+      store_history: false
+      target_team: red
+    controller:
+      type: MillRNNController
+      genome: <{g}>
+      sensor_id: 0
+    #   type: LevyController
+    #   velocity: 0.2
+    #   angular_velocity: 0.6
+    #   levy_constant: .3
+    #   curving: true
+    #   timeout_steps: 300
+    #   step_scale: 1.0
+    team: blue
+    agent_radius: !np 0.2 / 2
+    body_color:
+      - 0
+      - 70
+      - 255
+    body_filled: true
+metadata:
+  hash: _hash
+#%> set metricfile = m|default('ttc')
+#%> set cycles = cycles|default(1000)
+# %> set cycles = 99999
+stop_at: <{cycles|default(1000)}>
+metrics:
+- type: JinjaMetric
+  name: Time to Capture
+  metrics:
+  expression: world.metrics[1].average
+- type: Circliness
+  avg_history_max: 600
