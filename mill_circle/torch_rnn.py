@@ -80,7 +80,7 @@ def evolve(seed):
 
     while not es.stop():
         population = es.ask()
-        fitness = -1.0 * np.asarray(test_pop_circliness(population, WORLD_YAML, max_workers=10))
+        fitness = -1.0 * np.asarray(test_pop_circliness(population, WORLD_YAML, max_workers=13))
         es.tell(population, fitness)
         es.disp()
 
