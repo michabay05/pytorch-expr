@@ -27,7 +27,6 @@ def farp_nn_model(window=SENS_WINDOW):
         nn.Linear(4, 2)
     )
 
-
 class FarpNNController(AbstractController):
     def __init__(self, genome: torch.Tensor, sensor_id=0, agent=None, parent=None):
         super().__init__(agent=agent, parent=parent)
