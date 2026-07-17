@@ -20,8 +20,8 @@ def evolve(seed):
         "ftarget": -1.0,
         "tolfunhist": 1e-3,
         "tolfun": 1e-3,
-        "tolx": 1e-7,
-        "maxiter": 5000,
+        "tolx": 1e-6,
+        "tolflatfitness": 4,
     })
     count = 0
 
