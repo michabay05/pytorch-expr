@@ -3,7 +3,7 @@ import numpy as np
 import torch
 from torch.nn.utils import parameters_to_vector
 
-from CustomController import farp_nn_model
+from CustomController import FarpRNN
 from eval_blue_custom import test_mp_modified
 
 @torch.inference_mode()
@@ -11,11 +11,11 @@ def evolve(seed):
     np.random.seed(seed)
     torch.manual_seed(seed)
 
-    sample_model = farp_nn_model()
+    sample_model = FarpRNN()
     x0 = parameters_to_vector(sample_model.parameters()).numpy()
     es = cma.CMAEvolutionStrategy(x0, 0.2, {
         "seed": seed,
-        "maxiter": 200,
+        "maxiter": 150,
         "popsize": 15,
         "ftarget": -1.0,
         "tolfunhist": 1e-3,
@@ -31,7 +31,7 @@ def evolve(seed):
 
             fitness = []
             for genome in population:
-                _, rate = test_mp_modified(genome, rng_seed=seed + count, trials=100, tqdm_kwargs={"max_workers": 10})
+                _, rate = test_mp_modified(genome, rng_seed=seed, trials=100)
                 fitness.append(-rate)
 
             es.tell(population, fitness)
